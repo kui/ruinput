@@ -3,6 +3,8 @@
 require "ruinput/version"
 require "ruinput/ruinput.so"
 
+require "ruinput/uinput_user_dev"
+
 module Ruinput
-  # Your code goes here...
+  class UinputUserDev;end
 end

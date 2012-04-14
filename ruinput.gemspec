@@ -17,6 +17,6 @@ Gem::Specification.new do |gem|
   gem.version       = Ruinput::VERSION
 
   gem.add_dependency 'revdev', '>= 0.1.0'
-  gem.add_development_depencency 'rake'
-  gem.add_development_depencency 'bundler'
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'bundler'
 end
