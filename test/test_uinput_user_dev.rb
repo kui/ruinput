@@ -2,8 +2,8 @@
 
 require 'test/unit'
 require 'rubygems'
-require 'ruinput'
 require 'revdev'
+require 'ruinput'
 
 class UinputUserDevTest < Test::Unit::TestCase
   include Ruinput
