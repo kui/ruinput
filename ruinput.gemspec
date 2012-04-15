@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.name          = "ruinput"
   gem.require_paths = ["lib"]
   gem.version       = Ruinput::VERSION
+  gem.extensions        = Dir.glob 'ext/**/extconf.rb'
 
   gem.add_dependency 'revdev', '>= 0.1.0'
   gem.add_development_dependency 'rake'
