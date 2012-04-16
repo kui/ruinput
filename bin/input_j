@@ -1,0 +1,28 @@
+# -*- coding:utf-8; mode:ruby; -*-
+
+require "rubygems"
+require "revdev"
+require "ruinput"
+
+def main
+
+  include Revdev
+  $uinput = Ruinput::UinputDevice.new
+  def $uinput.send type, code, value
+    write_input_event InputEvent.new nil, EV_MSC, MSC_SCAN, code
+    write_input_event InputEvent.new nil, type, code, value
+    write_input_event InputEvent.new nil, EV_SYN, SYN_REPORT, 0
+  end
+
+  $uinput.create
+  sleep 0.5
+
+  $uinput.send EV_KEY, KEY_J, 1
+  $uinput.send EV_KEY, KEY_J, 0
+
+  sleep 0.5
+  $uinput.destroy
+
+end
+
+main

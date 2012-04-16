@@ -1,0 +1,37 @@
+# -*- coding:utf-8; mode:ruby; -*-
+
+require "rubygems"
+require "revdev"
+require "ruinput"
+
+def main
+
+  if ARGV.length != 1
+    puts "usage: #{$0} /dev/input/event[0-9]+"
+    exit false
+  end
+
+  include Revdev
+  $evdev = EventDevice.new ARGV.shift
+  $uinput = Ruinput::UinputDevice.new "/dev/uinput"
+
+  def $uinput.send_input_event type, code, value
+    write_input_event InputEvent.new nil, type, code, value
+  end
+
+  trap :INT do; $evdev.ungrab; $uinput.destroy; puts "destroy"; end;
+  trap :TERM do; $evdev.ungrab; $uinput.destroy; puts "destroy"; end;
+
+  $evdev.grab
+  $uinput.create
+  sleep 0.5
+
+  while true
+    ie = $evdev.read_input_event
+    # len = $uinput.write_input_event ie
+    # puts "type:%s\tcode:%s\tvalue:%s (%s)" % [ "#{ie.hr_type}(#{ie.type})", "#{ie.hr_code}(#{ie.code})", ie.value, len ]
+  end
+
+end
+
+main
