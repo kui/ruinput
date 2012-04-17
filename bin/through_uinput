@@ -24,11 +24,11 @@ def main
 
   $evdev.grab
   $uinput.create
-  sleep 0.5
-
+  # sleep 0.5
+  $DEBUG = true
   while true
     ie = $evdev.read_input_event
-    # len = $uinput.write_input_event ie
+    len = $uinput.write_input_event ie
     # puts "type:%s\tcode:%s\tvalue:%s (%s)" % [ "#{ie.hr_type}(#{ie.type})", "#{ie.hr_code}(#{ie.code})", ie.value, len ]
   end
 
