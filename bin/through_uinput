@@ -1,5 +1,12 @@
 # -*- coding:utf-8; mode:ruby; -*-
 
+USAGE = <<__USAGE
+usage: #{$0} devent_device
+  create virtual device with uinput and grab the argument event device
+
+example: #{$0} /dev/input/event2
+__USAGE
+
 require "rubygems"
 require "revdev"
 require "ruinput"
@@ -7,7 +14,7 @@ require "ruinput"
 def main
 
   if ARGV.length != 1
-    puts "usage: #{$0} /dev/input/event[0-9]+"
+    STDERR.puts USAGE
     exit false
   end
 
