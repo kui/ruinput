@@ -5,6 +5,10 @@ usage: #{$0} devent_device
   create virtual device with uinput and grab the argument event device
 
 example: #{$0} /dev/input/event2
+
+# if key inputs is mismatch of the displayed chars,
+# you should check keyboad layouts of both system default and
+# your xsession settings.
 __USAGE
 
 require "rubygems"
@@ -46,7 +50,7 @@ def main
     while true
       ie = $evdev.read_input_event
       len = $uinput.write_input_event ie
-      next if not ie.hr_type.equal? :EV_KEY # limit to display only key events
+      #next if not ie.hr_type.equal? :EV_KEY # limit to display only key events
       puts "type:#{ie.hr_type}(#{ie.type})\tcode:#{ie.hr_code}(#{ie.code})\tvalue:#{ie.value} (#{len})"
     end
   rescue => e
