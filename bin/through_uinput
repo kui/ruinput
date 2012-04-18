@@ -15,21 +15,35 @@ def main
   $evdev = EventDevice.new ARGV.shift
   $uinput = Ruinput::UinputDevice.new "/dev/uinput"
 
-  def $uinput.send_input_event type, code, value
-    write_input_event InputEvent.new nil, type, code, value
+  destroy = lambda do
+    begin
+      $evdev.ungrab
+      puts "ungrab"
+    rescue => e
+      puts e.backtrace.join "\n\t"
+    end
+    begin
+      $uinput.destroy
+      puts "destroy"
+    rescue => e
+      puts e.backtrace.join "\n\t"
+    end
   end
 
-  trap :INT do; $evdev.ungrab; $uinput.destroy; puts "destroy"; end;
-  trap :TERM do; $evdev.ungrab; $uinput.destroy; puts "destroy"; end;
+  trap :INT, &destroy
+  trap :TERM, &destroy
 
-  $evdev.grab
-  $uinput.create
-  # sleep 0.5
-  $DEBUG = true
-  while true
-    ie = $evdev.read_input_event
-    len = $uinput.write_input_event ie
-    # puts "type:%s\tcode:%s\tvalue:%s (%s)" % [ "#{ie.hr_type}(#{ie.type})", "#{ie.hr_code}(#{ie.code})", ie.value, len ]
+  begin
+    $uinput.create "foo", $evdev.device_id
+    $evdev.grab
+    while true
+      ie = $evdev.read_input_event
+      len = $uinput.write_input_event ie
+      next if not ie.hr_type.equal? :EV_KEY # limit to display only key events
+      puts "type:#{ie.hr_type}(#{ie.type})\tcode:#{ie.hr_code}(#{ie.code})\tvalue:#{ie.value} (#{len})"
+    end
+  rescue => e
+    puts e.backtrace.join "\n\t"
   end
 
 end
