@@ -10,6 +10,10 @@ module Ruinput
 
     DEFUALT_LOCATION = "/dev/uinput"
     DEFAULT_DEVICE_NAME = "ruinput"
+    DEFAULT_INPUT_ID = Revdev::InputId.new({ :bustype => Revdev::BUS_VIRTUAL,
+                                             :vendor => 1,
+                                             :product => 1,
+                                             :version => 1 })
 
     def initialize  location=nil
       @is_created = false
@@ -19,17 +23,18 @@ module Ruinput
 
     # create virtual event divece
     # _name_ :: device name
-    def create name = DEFAULT_DEVICE_NAME
-      id = Revdev::InputId.new({ :bustype => Revdev::BUS_VIRTUAL, :vendor => 1,
-                                  :product => 1, :version => 1})
+    # _id_ :: InputId ("struct input_id" on input.h)
+    def create name = DEFAULT_DEVICE_NAME, id = DEFAULT_INPUT_ID
+      id = DEFAULT_INPUT_ID if id.kind_of? Revdev::InputId
+
+      recognize_as_keyboard
+      #recognize_as_mouse
+
       uud = UinputUserDev.new({ :name => name, :id => id,
                                 :ff_effects_max => 0, :absmax => [20],
                                 :absmin => [30], :absfuzz => [4],
                                 :absflat => [5] })
       @file.syswrite uud.to_byte_string
-
-      recognize_as_keyboard
-      #recognize_as_mouse
 
       @file.ioctl UI_DEV_CREATE, nil
       @is_created = true
