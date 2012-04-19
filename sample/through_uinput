@@ -47,10 +47,19 @@ def main
   begin
     $uinput.create "foo", $evdev.device_id
     $evdev.grab
+    caps = true
     while true
       ie = $evdev.read_input_event
       len = $uinput.write_input_event ie
-      #next if not ie.hr_type.equal? :EV_KEY # limit to display only key events
+
+      # toggle capslock LED
+      if ie.code == KEY_CAPSLOCK and ie.value == 1
+        ie = InputEvent.new nil, EV_LED, LED_CAPSL, caps ? 1 : 0
+        $evdev.write_input_event ie
+        puts "## light #{ie.value}"
+        caps = (not caps)
+      end
+
       puts "type:#{ie.hr_type}(#{ie.type})\tcode:#{ie.hr_code}(#{ie.code})\tvalue:#{ie.value} (#{len})"
     end
   rescue => e
