@@ -25,7 +25,11 @@ module Ruinput
     # _name_ :: device name
     # _id_ :: InputId ("struct input_id" on input.h)
     def create name = DEFAULT_DEVICE_NAME, id = DEFAULT_INPUT_ID
-      id = DEFAULT_INPUT_ID if id.kind_of? Revdev::InputId
+      if not name.kind_of? String
+        raise ArgumentError, "1st arg expect String"
+      elsif not id.kind_of? Revdev::InputId
+        raise ArgumentError, "2nd arg expect Revdev::InputId"
+      end
 
       recognize_as_keyboard
       #recognize_as_mouse
