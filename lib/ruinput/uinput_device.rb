@@ -31,8 +31,7 @@ module Ruinput
         raise ArgumentError, "2nd arg expect Revdev::InputId"
       end
 
-      recognize_as_keyboard
-      #recognize_as_mouse
+      set_all_events
 
       uud = UinputUserDev.new({ :name => name, :id => id,
                                 :ff_effects_max => 0, :absmax => [20],
@@ -52,7 +51,7 @@ module Ruinput
       @file.close
     end
 
-    def recognize_as_keyboard
+    def set_all_events
       if @is_created
         raise Exception, "invalid method call: this uinput is already created"
       end
@@ -66,21 +65,17 @@ module Ruinput
         @file.ioctl UI_SET_MSCBIT, i
       end
 
-      @file.ioctl UI_SET_EVBIT, Revdev::EV_REP
-    end
+      @file.ioctl UI_SET_EVBIT, Revdev::EV_MSC
+      Revdev::MSC_CNT.times do |i|
+        @file.ioctl UI_SET_MSCBIT, i
+      end
 
-    def recognize_as_mouse
-      if @is_created
-        raise Exception, "invalid method call: this uinput is already created"
+      @file.ioctl UI_SET_EVBIT, Revdev::EV_ABS
+      Revdev::ABS_CNT.times do |i|
+        @file.ioctl UI_SET_ABSBIT, i
       end
-      @file.ioctl UI_SET_EVBIT, Revdev::EV_KEY
-      Revdev::KEY_CNT.times do |i|
-        @file.ioctl UI_SET_KEYBIT, i
-      end
-      @file.ioctl UI_SET_EVBIT, Revdev::EV_REL
-      Revdev::REL_CNT.times do |i|
-        @file.ioctl UI_SET_RELBIT, i
-      end
+
+      @file.ioctl UI_SET_EVBIT, Revdev::EV_REP
     end
 
   end
