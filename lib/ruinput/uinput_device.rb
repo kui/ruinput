@@ -47,6 +47,7 @@ module Ruinput
       if not @is_created
         raise Exception, "invalid method call: this uinput is not created"
       end
+      release_all_keys
       @file.ioctl UI_DEV_DESTROY, nil
       @file.close
     end
