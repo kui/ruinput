@@ -54,9 +54,9 @@ def main
 
       # toggle capslock LED
       if ie.code == KEY_CAPSLOCK and ie.value == 1
-        ie = InputEvent.new nil, EV_LED, LED_CAPSL, caps ? 1 : 0
-        $evdev.write_input_event ie
-        puts "## light #{ie.value}"
+        led_ev = InputEvent.new nil, EV_LED, LED_CAPSL, caps ? 1 : 0
+        $evdev.write_input_event led_ev
+        puts "## light #{caps}"
         caps = (not caps)
       end
 
