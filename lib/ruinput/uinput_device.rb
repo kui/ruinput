@@ -31,13 +31,13 @@ module Ruinput
         raise ArgumentError, "2nd arg expect Revdev::InputId"
       end
 
-      set_all_events
-
       uud = UinputUserDev.new({ :name => name, :id => id,
                                 :ff_effects_max => 0, :absmax => [20],
                                 :absmin => [30], :absfuzz => [4],
                                 :absflat => [5] })
       @file.syswrite uud.to_byte_string
+
+      set_all_events
 
       @file.ioctl UI_DEV_CREATE, nil
       @is_created = true
