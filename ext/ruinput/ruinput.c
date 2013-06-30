@@ -45,7 +45,7 @@ int abs_array_cpy(int abs_arr[], VALUE array_obj)
 VALUE uinput_user_dev_raw_initalize(VALUE self, VALUE bytes)
 {
   struct uinput_user_dev *uud;
-  uud = RSTRING(bytes)->ptr;
+  uud = RSTRING_PTR(bytes);
   printf("name: %s, ff_effects_max: %d\n", uud->name, uud->ff_effects_max);
   printf("id.bustype: %d, id.version: %d\n", uud->id.bustype, uud->id.version);
   printf("firsts-> absmax: %d, absflat: %d \n", uud->absmax[0], uud->absflat[0]);
