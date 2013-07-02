@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.version       = Ruinput::VERSION
   gem.extensions        = Dir.glob 'ext/**/extconf.rb'
 
-  gem.add_dependency 'revdev', '>= 0.1.0'
+  gem.add_dependency 'revdev', '~> 0.2.0'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'bundler'
 end
